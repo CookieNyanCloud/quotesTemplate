@@ -78,7 +78,6 @@ func main() {
 				continue
 			}
 			defer file.Close()
-
 			send := tgbotapi.FileReader{
 				Name:   file.Name(),
 				Reader: file,
