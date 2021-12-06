@@ -1,0 +1,36 @@
+:root {
+  --photoH: 620;
+  --photoW: 1280;
+}
+* {
+  margin: 0%;
+  box-sizing: border-box;
+}
+.background {
+  position: absolute;
+  z-index: -1;
+}
+
+.logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+/* 
+.logo {
+  margin-left: calc(calc(var(--photoW) / 20) * 1px);
+  margin-top: calc(calc(var(--photoH) / 12) * 1px);
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+.text {
+  position: absolute;
+  padding: 1rem;
+  height: calc(calc(var(--photoH) / 3) * 1px);
+  width: calc(calc(var(--photoW) /) * 1px);
+  background-color: rgba(46, 46, 53, 0.338);
+  top: calc(var(--photoW));
+  left: 50vw;
+} */

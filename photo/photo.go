@@ -6,23 +6,32 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 )
 
-func DownloadFile(URL, name string) (*os.File, error) {
+func DownloadFile(URL, name string) (string, error) {
 	response, err := http.Get(URL)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	defer response.Body.Close()
 
 	if response.StatusCode != 200 {
-		return nil, errors.New("received non 200 response code")
+		return "", errors.New("received non 200 response code")
 	}
-	fileName := fmt.Sprintf("%s.jpg", name)
+	s := response.Request.URL.Path
+	split := strings.Split(s, ".")
+	ext := split[len(split)-1]
+	fileName := fmt.Sprintf("%s.%s", name, ext)
 	file, err := os.Create(fileName)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	_, err = io.Copy(file, response.Body)
-	return file, nil
+	err = file.Close()
+	if err != nil {
+		return "", err
+	}
+	return fileName, nil
 }
+
