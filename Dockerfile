@@ -8,6 +8,6 @@ COPY ./ ./
 
 RUN go mod download
 
-RUN go build -o tg-sota-sheets ./main.go
+RUN go build -o quotes-template ./cmd/main.go
 
-CMD ["./tg-sota-sheets"]
+CMD ["./quotes-template"]

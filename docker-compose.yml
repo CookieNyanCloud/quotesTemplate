@@ -1,0 +1,8 @@
+version: '3.3'
+
+services:
+  quotes-template:
+    image: quotes-template
+    build: ./
+    env_file:
+      - .env
