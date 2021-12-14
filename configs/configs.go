@@ -2,18 +2,19 @@ package configs
 
 import (
 	"flag"
-	"github.com/joho/godotenv"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 const (
 	tgToken = "TG_TOKEN"
-	admin   = "ADMIN"
+	url     = "URL"
 )
 
 type Conf struct {
 	TgToken string
-	Admin   string
+	URL     string
 }
 
 func InitConf() (*Conf, error) {
@@ -32,6 +33,6 @@ func envVar(local bool) (*Conf, error) {
 	}
 	return &Conf{
 		TgToken: os.Getenv(tgToken),
-		Admin:   os.Getenv(admin),
+		URL:     os.Getenv(url),
 	}, nil
 }
