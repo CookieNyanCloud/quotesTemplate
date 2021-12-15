@@ -8,6 +8,6 @@ COPY ./ ./
 
 RUN go mod download
 
-RUN go build -o quotes-template ./cmd/main.go
+RUN go build -o quotes-template ./main.go
 
 CMD ["./quotes-template"]

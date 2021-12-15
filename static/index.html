@@ -6,27 +6,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quote</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --photoH: {{ .PhotoHeight  }};
+            --photoW: {{ .PhotoWidth  }};
+            --nameW: 30;
+        }
+
+        * {
+            margin: 0%;
+            padding: 0%;
+            box-sizing: border-box;
+            font-family: Corbel, 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans',
+            'DejaVu Sans', 'Bitstream Vera Sans', 'Liberation Sans', Verdana,
+            'Verdana Ref', sans-serif;
+        }
+
+        .container {
+            height: calc(var(--photoH) * 1px);
+            width: calc(var(--photoW) * 1px);
+            background-image: url('{{ .PhotoURL  }}');
+            box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.4);
+            display: grid;
+            grid-template-columns: 0.2fr 1fr 1fr 1fr 0.2fr;
+            grid-template-rows: 0.5fr 2fr 0.5fr;
+            gap: 0px 0px;
+            grid-template-areas: ". logo-all . . ." ". quote-text quote-text quote-text ." ". . . name .";
+        }
+
+        .logo-all {
+            display: grid;
+            grid-auto-columns: 1fr;
+            grid-template-rows: 0.2fr 0.8fr;
+            gap: 0px 0px;
+            grid-area: logo-all;
+        }
+
+        .logo {
+            grid-area: 2 / 1 / 3 / 2;
+            color: rgba(255, 255, 255, 0.726);
+
+        }
+
+        .full {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sota {
+            font-size: calc(calc(var(--photoW) / var(--nameW)) * 1px);
+            letter-spacing: calc(calc(var(--photoW) / calc(var(--nameW) * 4)) * 1px);
+        }
+
+        .mini {
+            font-size: calc(calc(var(--photoW) / calc(var(--nameW) * 2)) * 1px);
+        }
+
+        .quote-text {
+            grid-area: quote-text;
+            color: white;
+            font-size: calc(calc(var(--photoW) / var(--nameW)) * 1px);
+            background-color: rgba(0, 0, 0, 0.418);
+            text-align: center;
+            margin: auto;
+            border-radius: 1px;
+        }
+
+        .name {
+            grid-area: name;
+            color: white;
+            font-size: calc(calc(var(--photoW) / var(--nameW)) * 1px);
+            align-self: center;
+            text-align: end;
+        }
+
+    </style>
 </head>
 <body>
 <div class="container">
-
-    <div class="logo">
-        <div class="full">
+    <div class="logo-all">
+        <div class="logo">
+            <div class="full">
             <span class="sota">
                 SOTA
             </span>
-            <span class="mini">
+                <span class="mini">
                 t.me/sotavision
             </span>
+            </div>
         </div>
     </div>
     <div class="quote-text">
         <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Et nam mollitia nulla atque quis, at iusto molestias, unde expedita repudiandae repellendus veritatis natus? Nemo quaerat unde possimus adipisci cum mollitia?
+            {{ .QuoteText  }}
         </p>
     </div>
     <div class="name">
-        <p>Евгения Иванова</p>
+        <p>{{ .Name  }}</p>
     </div>
 </div>
 </body>

@@ -1,8 +1,9 @@
 package tgBot
 
 import (
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
+
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 func StartBot(token string) (*tgbotapi.BotAPI, tgbotapi.UpdatesChannel, error) {
@@ -14,9 +15,6 @@ func StartBot(token string) (*tgbotapi.BotAPI, tgbotapi.UpdatesChannel, error) {
 	log.Printf("Authorized on account %s", bot.Self.UserName)
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 600
-	updates, err := bot.GetUpdatesChan(u)
-	if err != nil {
-		return nil, nil, err
-	}
+	updates := bot.GetUpdatesChan(u)
 	return bot, updates, nil
 }

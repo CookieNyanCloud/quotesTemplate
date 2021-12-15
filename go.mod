@@ -7,6 +7,7 @@ require (
 	github.com/chromedp/chromedp v0.7.6 // indirect
 	github.com/go-redis/redis/v8 v8.11.4 // indirect
 	github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible // indirect
+	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1 // indirect
 	github.com/joho/godotenv v1.4.0
 	github.com/tebeka/selenium v0.9.9 // indirect
 	github.com/technoweenie/multipartstreamer v1.0.1 // indirect

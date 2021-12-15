@@ -1,6 +1,6 @@
 :root {
-  --photoH: 720;
-  --photoW: 1280;
+  --photoH: {{ .PhotoHeight  }};
+  --photoW: {{ .PhotoWidth  }};
   --nameW: 30;
 }
 
@@ -16,7 +16,7 @@
 .container {
   height: calc(var(--photoH) * 1px);
   width: calc(var(--photoW) * 1px);
-  background-image: url('./photo_2021-12-06_12-50-16.jpg');
+  background-image: url('{{ .PhotoURL  }}');
   box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.4);
   display: grid;
   grid-template-columns: 0.2fr 1fr 1fr 1fr 0.2fr;

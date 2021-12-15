@@ -9,12 +9,12 @@ import (
 
 const (
 	tgToken = "TG_TOKEN"
-	url     = "URL"
+	addr    = "ADDR"
 )
 
 type Conf struct {
 	TgToken string
-	URL     string
+	Addr    string
 }
 
 func InitConf() (*Conf, error) {
@@ -33,6 +33,6 @@ func envVar(local bool) (*Conf, error) {
 	}
 	return &Conf{
 		TgToken: os.Getenv(tgToken),
-		URL:     os.Getenv(url),
+		Addr:    os.Getenv(addr),
 	}, nil
 }
