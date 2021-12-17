@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
 
@@ -61,14 +60,19 @@ func main() {
 
 		mes := make([]string, 2)
 		if update.Message.Caption != "" {
-			os.Remove("screenshot.jpeg")
 			mes = strings.Split(update.Message.Caption, "\n")
+			if len(mes) != 2 {
+				msg := tgbotapi.NewMessage(update.Message.Chat.ID, "цитата перенос автор")
+				_, _ = bot.Send(msg)
+				continue
+			}
 			leng := len(update.Message.Photo)
 			phUrl, err := bot.GetFileDirectURL((update.Message.Photo)[leng-1].FileID)
 			if err != nil {
 				log.Printf("err getting photo URL: %v", err)
 				msg := tgbotapi.NewMessage(update.Message.Chat.ID, "err getting photo URL")
 				_, _ = bot.Send(msg)
+				continue
 			}
 			h := strconv.Itoa((update.Message.Photo)[leng-1].Height)
 			w := strconv.Itoa((update.Message.Photo)[leng-1].Width)
@@ -89,24 +93,22 @@ func main() {
 
 			client := &http.Client{}
 			response, _ := client.Do(request)
-
-			//image, _ := os.Create("screenshot.jpeg")
-			//io.Copy(image, response.Body)
-
 			file := tgbotapi.FileReader{
-				Name: "screenshot.jpeg",
+				Name:   "screenshot.jpeg",
 				Reader: response.Body,
 			}
 			photo := tgbotapi.NewPhoto(update.Message.From.ID, file)
 			bot.Send(photo)
-
 			response.Body.Close()
-			//image.Close()
 		} else if update.Message.Text != "" {
-			//mes = strings.Split(update.Message.Caption, "\n")
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "пока так не буду")
+			_, _ = bot.Send(msg)
+			continue
 
 		} else {
-
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "хз")
+			_, _ = bot.Send(msg)
+			continue
 		}
 
 	}
