@@ -14,19 +14,9 @@ import (
 
 const (
 	welcome = `
-бот цитат. Пришлите цитату, автора, возможно фото.
+бот цитат. Пришлите фото, цитату, автора цитаты, возможно автора фото.
 Одним сообщением, разделяя переносом.`
 )
-
-type Temp struct {
-	QuoteText   string
-	Name        string
-	PhotoHeight string
-	PhotoWidth  string
-	PhotoURL    string
-}
-
-//var tmplPage = template.Must(template.ParseFiles("./static/index.html"))
 
 func main() {
 	conf, err := configs.InitConf()
@@ -38,14 +28,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("error init bot:%v\n", err)
 	}
-	//go func() {
-	//	http.HandleFunc("/image", makeScreen)
-	//	http.ListenAndServe(conf.Addr, nil)
-	//}()
-
-	//ctx, cancel := chromedp.NewContext(context.Background(), chromedp.WithDebugf(log.Printf))
-	//defer cancel()
-
 	for update := range updates {
 
 		if update.Message == nil {
@@ -58,11 +40,17 @@ func main() {
 			continue
 		}
 
-		mes := make([]string, 2)
+		if update.Message.Command() == "change" {
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, welcome)
+			_, _ = bot.Send(msg)
+			continue
+		}
+
 		if update.Message.Caption != "" {
-			mes = strings.Split(update.Message.Caption, "\n")
-			if len(mes) != 2 {
-				msg := tgbotapi.NewMessage(update.Message.Chat.ID, "цитата перенос автор")
+			mes := strings.Split(update.Message.Caption, "\n")
+			if len(mes) < 2 || len(mes) >3 {
+				fmt.Println(len(mes))
+				msg := tgbotapi.NewMessage(update.Message.Chat.ID, "цитата\nавтор\nавтор фото")
 				_, _ = bot.Send(msg)
 				continue
 			}
@@ -76,15 +64,18 @@ func main() {
 			}
 			h := strconv.Itoa((update.Message.Photo)[leng-1].Height)
 			w := strconv.Itoa((update.Message.Photo)[leng-1].Width)
-			q := fmt.Sprintf("%s?quote-text=%s&name=%s&photo-height=%s&photo-width=%s&photo-url=%s",
+			author := ""
+			if len(mes) == 3 {
+				author = mes[2]
+			}
+			q := fmt.Sprintf("%s?quote-text=%s&name=%s&author=%s&photo-height=%s&photo-width=%s&photo-url=%s",
 				conf.URL,
-				mes[0], mes[1], h, w, phUrl)
+				mes[0], mes[1], author, h, w, phUrl)
 			fmt.Println(q)
 			apiFlashEndpoint := "https://api.apiflash.com/v1/urltoimage"
 			request, _ := http.NewRequest("GET", apiFlashEndpoint, nil)
 			query := request.URL.Query()
 			query.Add("access_key", conf.ApiKey)
-			//query.Add("format", "png")
 			query.Add("element", ".container")
 			query.Add("width", h)
 			query.Add("height", h)
