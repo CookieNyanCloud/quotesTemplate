@@ -48,12 +48,6 @@ func main() {
 
 		if update.Message.Caption != "" {
 			mes := strings.Split(update.Message.Caption, "\n")
-			if len(mes) < 2 || len(mes) >3 {
-				fmt.Println(len(mes))
-				msg := tgbotapi.NewMessage(update.Message.Chat.ID, "цитата\nавтор\nавтор фото")
-				_, _ = bot.Send(msg)
-				continue
-			}
 			leng := len(update.Message.Photo)
 			phUrl, err := bot.GetFileDirectURL((update.Message.Photo)[leng-1].FileID)
 			if err != nil {
@@ -64,13 +58,28 @@ func main() {
 			}
 			h := strconv.Itoa((update.Message.Photo)[leng-1].Height)
 			w := strconv.Itoa((update.Message.Photo)[leng-1].Width)
+			quote := ""
+			quoteAuthor := ""
 			author := ""
-			if len(mes) == 3 {
+			switch len(mes) {
+			case 1:
+				quote = mes[0]
+			case 2:
+				quote = mes[0]
+				quoteAuthor = mes[1]
+			case 3:
+				quote = mes[0]
+				quoteAuthor = mes[1]
 				author = mes[2]
+			default:
+				msg := tgbotapi.NewMessage(update.Message.Chat.ID, "что-то не так")
+				_, _ = bot.Send(msg)
+				continue
 			}
+
 			q := fmt.Sprintf("%s?quote-text=%s&name=%s&author=%s&photo-height=%s&photo-width=%s&photo-url=%s",
 				conf.URL,
-				mes[0], mes[1], author, h, w, phUrl)
+				quote, quoteAuthor, author, h, w, phUrl)
 			fmt.Println(q)
 			apiFlashEndpoint := "https://api.apiflash.com/v1/urltoimage"
 			request, _ := http.NewRequest("GET", apiFlashEndpoint, nil)
